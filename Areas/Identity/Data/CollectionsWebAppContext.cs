@@ -11,10 +11,10 @@ public class CollectionsWebAppContext : IdentityDbContext<User>
         : base(options)
     {
     }
-    DbSet<Collection> Collections { get; set; }
-    DbSet<Item> Items { get; set; }
-    DbSet<Comment> Comments { get; set; }
-    DbSet<Like> Like { get; set; }
+    public DbSet<Collection> Collections { get; set; }
+    public DbSet<Item> Items { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<Like> Like { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

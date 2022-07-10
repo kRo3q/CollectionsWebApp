@@ -15,6 +15,7 @@ namespace CollectionsWebApp.Models
         public string? Image { get; set; }
 
         public virtual User User { get; set; }
+        public string UserId { get; set; }
         public ICollection<Item>? Items { get; set; }
     }
 }

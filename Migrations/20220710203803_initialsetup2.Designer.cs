@@ -4,6 +4,7 @@ using CollectionsWebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollectionsWebApp.Migrations
 {
     [DbContext(typeof(CollectionsWebAppContext))]
-    partial class CollectionsWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20220710203803_initialsetup2")]
+    partial class initialsetup2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
