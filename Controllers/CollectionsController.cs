@@ -26,8 +26,9 @@ namespace CollectionsWebApp.Controllers
         // GET: Collections
         public async Task<IActionResult> Index()
         {
-              return _context.Collections != null ? 
-                          View(await _context.Collections.ToListAsync()) :
+            var userId = _userMenager.GetUserId(User);
+            return _context.Collections != null ? 
+                          View(await _context.Collections.Where(x => x.UserId == userId).ToListAsync()) :
                           Problem("Entity set 'CollectionsWebAppContext.Collections'  is null.");
         }
 
@@ -60,14 +61,25 @@ namespace CollectionsWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CollectionId,Name,Description,Image,UserId")] Collection collection)
+        public async Task<IActionResult> Create(Collection model)
         {
-            collection.UserId = _userMenager.GetUserId(User);
+            //collection.UserId = _userMenager.GetUserId(User);
+            var userId = _userMenager.GetUserId(User);
 
-                _context.Add(collection);
+            if (userId != null)
+            {
+                var currentUser = _context.Users.Include(c => c.Collections).First(c => c.Id == userId);
+                List<Collection> collections = new List<Collection>();
+                collections = currentUser.Collections.ToList();
+                collections.Add(new Collection() {
+                    Name = model.Name,
+                    Description = model.Description,
+                    Image = model.Image
+                });
+                currentUser.Collections = collections;
                 await _context.SaveChangesAsync();
+            }
                 return RedirectToAction(nameof(Index));
-
         }
 
         // GET: Collections/Edit/5
@@ -91,9 +103,9 @@ namespace CollectionsWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CollectionId,Name,Description,Image")] Collection collection)
+        public async Task<IActionResult> Edit(int id, [Bind("CollectionId,Name,Description,Image")] Collection model)
         {
-            if (id != collection.CollectionId)
+            if (id != model.CollectionId)
             {
                 return NotFound();
             }
@@ -102,12 +114,12 @@ namespace CollectionsWebApp.Controllers
             {
                 try
                 {
-                    _context.Update(collection);
+                    _context.Update(model);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CollectionExists(collection.CollectionId))
+                    if (!CollectionExists(model.CollectionId))
                     {
                         return NotFound();
                     }
@@ -118,7 +130,7 @@ namespace CollectionsWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(collection);
+            return View(model);
         }
 
         // GET: Collections/Delete/5

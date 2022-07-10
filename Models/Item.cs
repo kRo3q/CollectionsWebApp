@@ -34,6 +34,6 @@ namespace CollectionsWebApp.Models
         public DateTime OptionalDate2 { get; set; }
         [DataType(DataType.Date)]
         public DateTime OptionalDate3 { get; set; }
-        public ICollection<Comment>? Comments { get; set; }
+        public List<Comment>? Comments { get; set; }
     }
 }

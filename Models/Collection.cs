@@ -16,6 +16,6 @@ namespace CollectionsWebApp.Models
 
         public virtual User User { get; set; }
         public string UserId { get; set; }
-        public ICollection<Item>? Items { get; set; }
+        public List<Item>? Items { get; set; }
     }
 }
