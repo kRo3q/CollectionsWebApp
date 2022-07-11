@@ -12,6 +12,9 @@ namespace CollectionsWebApp.Models
         [Required]
         public string Tags { get; set; }
         public int LikeCount { get; set; } = 0;
+
+        public virtual Collection Collection{ get; set; }
+        public int CollectionId { get; set; }
         public List<Comment>? Comments { get; set; }
     }
 }

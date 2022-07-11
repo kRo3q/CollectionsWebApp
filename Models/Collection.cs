@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollectionsWebApp.Models
@@ -17,6 +16,7 @@ namespace CollectionsWebApp.Models
 
         public virtual User User { get; set; }
         public string UserId { get; set; }
+
         public List<Item>? Items { get; set; }
     }
 }
