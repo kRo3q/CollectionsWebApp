@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CollectionsWebApp.Data;
 using CollectionsWebApp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CollectionsWebApp.Controllers
 {
@@ -23,8 +24,16 @@ namespace CollectionsWebApp.Controllers
             _userMenager = userManager;
         }
 
-        // GET: Collections
         public async Task<IActionResult> Index()
+        {
+            return _context.Collections != null ?
+                          View(await _context.Collections.ToListAsync()) :
+                          Problem("Entity set 'CollectionsWebAppContext.Collections'  is null.");
+        }
+
+        // GET: Collections
+        [Authorize]
+        public async Task<IActionResult> MyCollections()
         {
             var userId = _userMenager.GetUserId(User);
             return _context.Collections != null ? 
@@ -33,6 +42,7 @@ namespace CollectionsWebApp.Controllers
         }
 
         // GET: Collections/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Collections == null)
@@ -51,6 +61,7 @@ namespace CollectionsWebApp.Controllers
         }
 
         // GET: Collections/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -61,6 +72,7 @@ namespace CollectionsWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(Collection model)
         {
             //collection.UserId = _userMenager.GetUserId(User);
@@ -83,6 +95,7 @@ namespace CollectionsWebApp.Controllers
         }
 
         // GET: Collections/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Collections == null)
@@ -103,6 +116,7 @@ namespace CollectionsWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CollectionId,Name,Description,Image")] Collection model)
         {
             if (id != model.CollectionId)
@@ -134,6 +148,7 @@ namespace CollectionsWebApp.Controllers
         }
 
         // GET: Collections/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Collections == null)
@@ -154,6 +169,7 @@ namespace CollectionsWebApp.Controllers
         // POST: Collections/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Collections == null)
