@@ -1,4 +1,4 @@
-﻿using System;
+﻿                                                        using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -85,7 +85,8 @@ namespace CollectionsWebApp.Controllers
                 collections.Add(new Collection() {
                     Name = model.Name,
                     Description = model.Description,
-                    Image = model.Image
+                    Image = model.Image,
+                    Topic = model.Topic
                 });
                 currentUser.Collections = collections;
                 await _context.SaveChangesAsync();
@@ -136,7 +137,8 @@ namespace CollectionsWebApp.Controllers
                 {
                     Name = model.Name,
                     Description = model.Description,
-                    Image = model.Image
+                    Image = model.Image,
+                    Topic = model.Topic
                 };
                 currentUser.Collections = collections;
                 await _context.SaveChangesAsync();
