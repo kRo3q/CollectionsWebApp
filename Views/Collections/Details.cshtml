@@ -1,26 +1,16 @@
 ﻿@model CollectionsWebApp.Models.Collection
 
-@{
-    ViewData["Title"] = "Details";
-}
 
-<h1>Details</h1>
+<h1>@Model.Name</h1>
 
 <div>
-    <h4>Collection</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+             @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Image)
@@ -29,9 +19,39 @@
             @Html.DisplayFor(model => model.Image)
         </dd>
     </dl>
+
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Tags
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Items) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tags)
+            </td>
+            <td>
+                <a asp-controller="Items" asp-action="Edit" asp-route-id="@item.ItemId">Edit</a> |
+                <a asp-controller="Items" asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
 </div>
 <div>
-    <a asp-controller="Items" asp-action="Create">Add new item</a> |
+    <a asp-action="CreateItem" asp-route-id="@Model?.CollectionId">Add new item</a> |
     <a asp-action="Edit" asp-route-id="@Model?.CollectionId">Edit the collection</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="MyCollections">Back to List</a>
 </div>

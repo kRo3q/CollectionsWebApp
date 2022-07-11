@@ -1,4 +1,4 @@
-﻿                                                        using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,6 +30,34 @@ namespace CollectionsWebApp.Controllers
                           View(await _context.Collections.ToListAsync()) :
                           Problem("Entity set 'CollectionsWebAppContext.Collections'  is null.");
         }
+       /* public async Task<IActionResult> DisplayItems()
+        {
+            return _context.Items != null ?
+                        View(await _context.Items.Where(x => x.CollectionId == collectionId).ToListAsync()) :
+                        Problem("Entity set 'CollectionsWebAppContext.Items'  is null.");
+        }
+        */
+        [Authorize]
+        public IActionResult CreateItem()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateItem(int Id, Item model)
+        {
+            var currentCollection = _context.Collections.Include(x => x.Items).First(x => x.CollectionId == Id);
+            List<Item> items = new List<Item>();
+            items = currentCollection.Items.ToList();
+            items.Add(new Item { 
+                Name = model.Name,
+                Tags = model.Tags
+            });
+            currentCollection.Items = items;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(MyCollections));
+        }
 
         // GET: Collections
         [Authorize]
@@ -52,6 +80,7 @@ namespace CollectionsWebApp.Controllers
 
             var collection = await _context.Collections
                 .FirstOrDefaultAsync(m => m.CollectionId == id);
+            collection.Items = _context.Items.Where(x => x.CollectionId == id).ToList();
             if (collection == null)
             {
                 return NotFound();

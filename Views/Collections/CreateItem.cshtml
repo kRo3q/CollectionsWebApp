@@ -1,16 +1,16 @@
 ﻿@model CollectionsWebApp.Models.Item
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create item";
 }
 
-<h1>Create</h1>
+<h1>Create item</h1>
 
 <h4>Item</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateItem">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -30,7 +30,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="MyCollections">Back to List</a>
 </div>
 
 @section Scripts {

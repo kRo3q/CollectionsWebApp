@@ -27,45 +27,7 @@ namespace CollectionsWebApp.Controllers
                           Problem("Entity set 'CollectionsWebAppContext.Items'  is null.");
         }
 
-        // GET: Items/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Items == null)
-            {
-                return NotFound();
-            }
 
-            var item = await _context.Items
-                .FirstOrDefaultAsync(m => m.ItemId == id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return View(item);
-        }
-
-        // GET: Items/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Items/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemId,Name,Tags,LikeCount,OptionalInt1,OptionalInt2,OptionalInt3,OptionalString1,OptionalString2,OptionalString3,OptionalMultiLine1,OptionalMultiLine2,OptionalMultiLine3,OptionalCheckBox1,OptionalCheckBox2,OptionalCheckBox3,OptionalDate1,OptionalDate2,OptionalDate3")] Item item)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(item);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(item);
-        }
 
         // GET: Items/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -88,15 +50,13 @@ namespace CollectionsWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemId,Name,Tags,LikeCount,OptionalInt1,OptionalInt2,OptionalInt3,OptionalString1,OptionalString2,OptionalString3,OptionalMultiLine1,OptionalMultiLine2,OptionalMultiLine3,OptionalCheckBox1,OptionalCheckBox2,OptionalCheckBox3,OptionalDate1,OptionalDate2,OptionalDate3")] Item item)
+        public async Task<IActionResult> Edit(int id, Item item)
         {
             if (id != item.ItemId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
                 try
                 {
                     _context.Update(item);
@@ -113,9 +73,7 @@ namespace CollectionsWebApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(item);
+                return View("Collections/MyCollections");
         }
 
         // GET: Items/Delete/5
