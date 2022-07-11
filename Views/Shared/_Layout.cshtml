@@ -45,6 +45,15 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script> src="https://code.jquery.com/jquery-1.12.4.js", src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+        var tags = ["Book", "Monitor", "Alcohol", "Bottle", "Mouse", "Tea", "Coffee", "Ball", "Game", "Processor", "GPU"]
+
+        $(document).ready(function () {
+            $('#tags').autocomplete({
+                source: tags
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

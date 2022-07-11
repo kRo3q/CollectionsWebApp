@@ -12,6 +12,7 @@ namespace CollectionsWebApp.Models
         public string Name { get; set; }
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
+        public string Topic { get; set; }
         public string? Image { get; set; }
 
         public virtual User User { get; set; }

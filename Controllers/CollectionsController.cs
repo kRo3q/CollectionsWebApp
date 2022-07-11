@@ -75,7 +75,6 @@ namespace CollectionsWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> Create(Collection model)
         {
-            //collection.UserId = _userMenager.GetUserId(User);
             var userId = _userMenager.GetUserId(User);
 
             if (userId != null)
@@ -91,7 +90,7 @@ namespace CollectionsWebApp.Controllers
                 currentUser.Collections = collections;
                 await _context.SaveChangesAsync();
             }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(MyCollections));
         }
 
         // GET: Collections/Edit/5
@@ -103,12 +102,12 @@ namespace CollectionsWebApp.Controllers
                 return NotFound();
             }
 
-            var collection = await _context.Collections.FindAsync(id);
-            if (collection == null)
+            var model = await _context.Collections.FindAsync(id);
+            if (model == null)
             {
                 return NotFound();
             }
-            return View(collection);
+            return View(model);
         }
 
         // POST: Collections/Edit/5
@@ -117,34 +116,43 @@ namespace CollectionsWebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("CollectionId,Name,Description,Image")] Collection model)
+        public async Task<IActionResult> Edit(int id, Collection model)
         {
             if (id != model.CollectionId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                var userId = _userMenager.GetUserId(User);
+                var currentUser = _context.Users.Include(c => c.Collections).First(c => c.Id == userId);
+
+                List<Collection> collections = new List<Collection>();
+                collections = currentUser.Collections.ToList();
+                var index = collections.FindIndex(c => c.CollectionId == id);
+
+                collections[index] = new Collection()
                 {
-                    _context.Update(model);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CollectionExists(model.CollectionId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                    Name = model.Name,
+                    Description = model.Description,
+                    Image = model.Image
+                };
+                currentUser.Collections = collections;
+                await _context.SaveChangesAsync();
             }
-            return View(model);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CollectionExists(model.CollectionId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(MyCollections));
         }
 
         // GET: Collections/Delete/5
@@ -183,7 +191,7 @@ namespace CollectionsWebApp.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyCollections));
         }
 
         private bool CollectionExists(int id)
